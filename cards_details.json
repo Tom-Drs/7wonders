@@ -1,0 +1,48 @@
+{
+  "filon": {
+    "type": "Raw Materials",
+    "cost": {},
+    "production": {
+      "ore": 1
+    }
+  },
+  "exploitation forestiere": {
+    "type": "Raw Materials",
+    "cost": {
+      "gold": 1
+    },
+    "production": {
+      "stone/wood": 1
+    }
+  },
+  "fosse argileuse": {
+    "type": "Raw Materials",
+    "cost": {
+      "gold": 1
+    },
+    "production": {
+      "clay/ore": 1
+    }
+  },
+  "cavite": {
+    "type": "Raw Materials",
+    "cost": {},
+    "production": {
+      "stone": 1
+    }
+  },
+  "chantier": {
+    "type": "Raw Materials",
+    "cost": {},
+    "production": {
+      "wood": 1
+    }
+  },
+  "bassin argileux": {
+    "type": "Raw Materials",
+    "cost": {},
+    "production": {
+      "clay": 1
+    }
+  }
+}
