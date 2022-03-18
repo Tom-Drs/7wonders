@@ -1,5 +1,5 @@
 import json
-from cards02 import *
+from cards import *
 
 
 def get_cards_per_age(age):
