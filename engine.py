@@ -11,9 +11,10 @@ class GameEngine:
         self.players = []
         self.cards = []
         self.current_age = 1
+        self.copy_state
         self.create_players()
         self.cards_deposit = []
-        self.create_stack_cards(1, 3)
+        self.allocate_decks(1, 3)
         self.play_current_round()
 
     def create_players(self):
@@ -27,14 +28,15 @@ class GameEngine:
             player.play()
 
     def receive_card(self, player_id: int, card):
-        player = self.get_player_by_id(player_id)
+        player = self.get_player_by_id(player_id, self.players)
         if player is None:
             raise Exception("Player not found with id.")
         if not player.is_double(card):
             self.cards_deposit.append((card, player))
 
-    def get_player_by_id(self, player_id):
-        for player in self.players:
+    def get_player_by_id(self, player_id: int, players_list: list):
+        """Method to get player in a list with an id."""
+        for player in players_list:
             if player.id == player_id:
                 return player
         return None
@@ -43,47 +45,55 @@ class GameEngine:
         for i in range(7):
             self.wait_players()
             if len(self.cards_deposit) == self.number_player:
-                print("Je joue les cartes")
                 self.copy_state = self.get_copy_state()
                 for card, player in self.cards_deposit:
-                    print(card, player)
-                    player.placed_cards.append(card)
+                    current_player = self.get_player_by_id(player.id,
+                                                           self.copy_state)
+                    current_player.placed_cards.append(card)
                     for card_index in range(len(player.hand_cards)):
-                        if card.name == player.hand_cards[card_index]:
-                            player.hand_cards.pop(card_index)
-                    player.print_data()
-                    print(player.get_all_resources())
+                        if card.name == current_player.hand_cards[
+                            card_index].name:
+                            current_player.hand_cards.pop(card_index)
+                            break
+                    current_player.print_data()
             self.next_state()
             self.cards_deposit = []
+            self.switch_decks()
 
-    
     def next_state(self):
         self.players = []
         for player in self.copy_state:
             self.players.append(player)
 
-    def get_copy_state(self):
+    def get_copy_state(self) -> list:
         return [player for player in self.players]
 
-    # def get_player_in_copy_state(self, player):
-    #     for new_player in self.copy_state:
-    #         if player.id == new_player.id:
-    #             return new_player
-    #     return None
-    
-    def create_stack_cards(self, age, players):
-        cards = get_cards_per_age(age)
-        number_cards = int(len(cards)/players)
-        for player in range(players):
+    def allocate_decks(self):
+        """Method to allocate decks for each player."""
+        cards = get_cards_per_age(self.current_age)
+        number_cards = int(len(cards) / self.number_player)
+        for player in range(self.number_player):
             for _ in range(number_cards):
-                random = randint(0, len(cards)-1)           
-                self.get_player_by_id(player).hand_cards.append(cards[random])
+                random = randint(0, len(cards) - 1)
+                self.get_player_by_id(player, self.players).hand_cards.append(
+                    cards[random])
                 cards.pop(random)
-    
+
+    def switch_decks(self):
+        """Method to switching decks between players."""
+        decks = []
+        if self.current_age % 2 == 1:
+            for player_index in range(len(self.players) - 1):
+                decks.append(self.players[player_index].hand_cards)
+            decks.insert(0, self.players[-1].hand_cards)
+        if self.current_age % 2 == 0:
+            for player_index in range(len(self.players) - 1, 0, -1):
+                decks.insert(0, self.players[player_index].hand_cards)
+            decks.append(self.players[0].hand_cards)
+        for index in range(len(self.players)):
+            self.players[index].hand_cards = decks[index]
 
     def can_put_card(self, card, player):
         resource = player.get_all_resources()
         cost = card.cost
-        pass #comparer les ressources avec le prix de la carte
-
-
+        pass  # comparer les ressources avec le prix de la carte
