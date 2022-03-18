@@ -65,5 +65,14 @@ class GameEngine:
     #         if player.id == new_player.id:
     #             return new_player
     #     return None
+    
+    def creat_stack_cards(self, age, players):
+        cards = get_cards_per_age(age)
+        number_cards = len(cards)/players
+        for player in range(players):
+            for k in range(number_cards):
+                random = randint(0, len(cards)-1)           
+                self.get_player_by_id(player).hand_cards.append(cards[random])
+                cards.pop(random)
 
 
