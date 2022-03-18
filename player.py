@@ -3,14 +3,13 @@ from pprint import pprint
 
 class Player():
     """ Player class to get all information"""
-    def __init__(self, id, hand_cards, wonder, engine, gold=3, war_points=0,
-                 placed_cards=[]):
+    def __init__(self, id, hand_cards, wonder, engine, gold=3, war_points=0):
 
         self.id = id
         self.gold = gold
         self.hand_cards = hand_cards
         self.war_points = war_points
-        self.placed_cards = placed_cards
+        self.placed_cards = []
         self.engine = engine
         self.wonder = wonder
 
@@ -40,7 +39,10 @@ class Player():
         for card in self.placed_cards:
             if card.color == "brown" or card.color == "grey":
                 for key, value in card.production.items():
-                    resources_in_possession[key] = value
+                    if resources_in_possession.get(key) == None:
+                        resources_in_possession[key] = value
+                    else:
+                        resources_in_possession[key] += value                
         resources_in_possession["gold"] = self.gold
         return resources_in_possession
 
@@ -51,6 +53,55 @@ class Player():
                 return True
         return False
 
+
+    def can_put_card(self, card): #A test
+        resource = self.get_all_resources()
+        cost = card.cost
+        if cost == {}:
+            return True
+        elif list(cost.items())[0][0] == "gold":
+            if resource["gold"] >= cost["gold"]:
+                return True
+            return False
+        del resource["gold"]
+        for key, value in resource.items():
+            if cost.get(key) != None:
+                cost[key] -= value
+                if cost[key] == 0:
+                    del cost[key]
+        resource_split = []
+        dico_resource_split = {}
+        cpt = 0                      
+        for key, value in resource.items():            
+            if len(key) > 6:
+                resource_split.append(resource[key].split("/"))
+                for index in range(len(resource_split[cpt])):
+                    if dico_resource_split.get(resource_split[cpt][index]) == None:
+                        dico_resource_split[resource_split[cpt][index]] = value
+                    else:
+                        dico_resource_split[resource_split[cpt][index]] += value
+                cpt += 1
+        for elt in resource_split:
+            if cost.get(elt[0]) != None and cost.get(elt[1]) != None:
+                if dico_resource_split[elt[0]] >= dico_resource_split[elt[1]]:
+                    cost[elt[1]] -= 1
+                    if cost[elt[1]] == 0:
+                        del cost[elt[1]] 
+                else:
+                    cost[elt[0]] -= 1
+                    if cost[elt[0]] == 0:
+                        del cost[elt[0]]
+            elif cost.get(elt[0]) != None:
+                cost[elt[0]] -= 1
+                if cost[elt[0]] == 0:
+                    del cost[elt[0]] 
+            elif cost.get(elt[1]) != None:
+                cost[elt[1]] -= 1
+                if cost[elt[1]] == 0:
+                    del cost[elt[1]]                 
+        if cost == {}:
+            return True
+        return False
 
     """retrieve information on war points"""
     def current_war_points():
