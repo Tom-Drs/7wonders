@@ -1,7 +1,10 @@
-﻿class Player():
+﻿import inspect 
+from pprint import pprint
+
+class Player():
     """ Player class to get all information"""
     def __init__(self, id, hand_cards, wonder, engine, gold=3, war_points=0,
-                 placed_cards=0):
+                 placed_cards=[]):
 
         self.id = id
         self.gold = gold
@@ -12,13 +15,14 @@
         self.wonder = wonder
 
     def play(self):
+        self.print_data()
         card_number = int(input(f"Quelle carte voulez vous jouer ? ({self.id})"))
         while not 0 <= card_number < len(self.hand_cards):
             card_number = int(input(f"Quelle carte voulez vous jouer ? ({self.id})"))
         return self.send_card(card_number)
 
     def send_card(self, card_number):
-        self.engine.receive_card(self, self.hand_cards[card_number])
+        self.engine.receive_card(self.id, self.hand_cards[card_number])
         
     def print_data(self):
         print("------------")
@@ -41,9 +45,9 @@
         return resources_in_possession
 
     def is_double(self, card):
-        for card_placed in self.placed_cards():
+        for card_placed in self.placed_cards:
             if card_placed.name == card.name:
-                return False
+                return True
         return False
 
 

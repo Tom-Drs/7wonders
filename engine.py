@@ -1,6 +1,7 @@
 from player import Player
-from cards.cards import create_card
 from pprint import pprint
+from cards.factory import get_cards_per_age
+from random import randint
 
 
 class GameEngine:
@@ -12,11 +13,12 @@ class GameEngine:
         self.current_age = 1
         self.create_players()
         self.cards_deposit = []
+        self.create_stack_cards(1, 3)
+        self.play_current_round()
 
     def create_players(self):
         for player_id in range(self.number_player):
-            cards = create_card()
-            new_player = Player(id=player_id, hand_cards=cards, engine=self,
+            new_player = Player(id=player_id, hand_cards=[], engine=self,
                                 wonder=None)
             self.players.append(new_player)
 
@@ -28,8 +30,8 @@ class GameEngine:
         player = self.get_player_by_id(player_id)
         if player is None:
             raise Exception("Player not found with id.")
-        if player.can_put_card(card):
-            self.cards_deposit.append(card, player)
+        if not player.is_double(card):
+            self.cards_deposit.append((card, player))
 
     def get_player_by_id(self, player_id):
         for player in self.players:
@@ -41,8 +43,10 @@ class GameEngine:
         for i in range(7):
             self.wait_players()
             if len(self.cards_deposit) == self.number_player:
+                print("Je joue les cartes")
                 self.copy_state = self.get_copy_state()
                 for card, player in self.cards_deposit:
+                    print(card, player)
                     player.placed_cards.append(card)
                     for card_index in range(len(player.hand_cards)):
                         if card.name == player.hand_cards[card_index]:
@@ -66,11 +70,11 @@ class GameEngine:
     #             return new_player
     #     return None
     
-    def creat_stack_cards(self, age, players):
+    def create_stack_cards(self, age, players):
         cards = get_cards_per_age(age)
-        number_cards = len(cards)/players
+        number_cards = int(len(cards)/players)
         for player in range(players):
-            for k in range(number_cards):
+            for _ in range(number_cards):
                 random = randint(0, len(cards)-1)           
                 self.get_player_by_id(player).hand_cards.append(cards[random])
                 cards.pop(random)
