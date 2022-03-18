@@ -30,7 +30,11 @@
             resources_in_possession [card] = card.production
         return resources_in_possession
 
-
+    def is_double(self, card):
+        for card_placed in self.placed_cards():
+            if card_placed.name == card.name:
+                return False
+        return False
 
 
     """retrieve information on war points"""
