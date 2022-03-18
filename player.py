@@ -11,14 +11,24 @@
         self.engine = engine
         self.wonder = wonder
 
-    """def play(self):
+    def play(self):
         card_number = int(input(f"Quelle carte voulez vous jouer ? ({self.id})"))
         while not 0 <= card_number < len(self.hand_cards):
             card_number = int(input(f"Quelle carte voulez vous jouer ? ({self.id})"))
         return self.send_card(card_number)
 
     def send_card(self, card_number):
-        self.engine.receive_card(self, self.hand_cards[card_number])"""
+        self.engine.receive_card(self, self.hand_cards[card_number])
+        
+    def print_data(self):
+    print("------------")
+    for i in inspect.getmembers(self):
+        i = list(i)
+        if not i[0].startswith('_'):
+            if not inspect.ismethod(i[1]):
+                if i[0] == "hand_cards" or i[0] == "placed_cards":
+                    i[1] = [card.name for card in i[1]]
+                print(i)
 
 
 
