@@ -35,14 +35,15 @@ class Player():
                     print(i)
 
 
-
-#fonction non testée et pas sûre
     def get_all_resources(self):
         resources_in_possession = {}
         for card in self.placed_cards:
-            card.production
-            resources_in_possession [card] = card.production
+            if card.color == "brown" or card.color == "grey":
+                for key, value in card.production.items():
+                    resources_in_possession[key] = value
+        resources_in_possession["gold"] = self.gold
         return resources_in_possession
+
 
     def is_double(self, card):
         for card_placed in self.placed_cards:

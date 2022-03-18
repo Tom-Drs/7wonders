@@ -52,6 +52,7 @@ class GameEngine:
                         if card.name == player.hand_cards[card_index]:
                             player.hand_cards.pop(card_index)
                     player.print_data()
+                    print(player.get_all_resources())
             self.next_state()
             self.cards_deposit = []
 
@@ -78,5 +79,11 @@ class GameEngine:
                 random = randint(0, len(cards)-1)           
                 self.get_player_by_id(player).hand_cards.append(cards[random])
                 cards.pop(random)
+    
+
+    def can_put_card(self, card, player):
+        resource = player.get_all_resources()
+        cost = card.cost
+        pass #comparer les ressources avec le prix de la carte
 
 
