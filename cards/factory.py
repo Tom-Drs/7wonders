@@ -1,5 +1,5 @@
 import json
-from cards import *
+from cards.cards import *
 
 
 def get_cards_per_age(age):
@@ -24,12 +24,12 @@ def get_cards_per_age(age):
 
 
 def get_cards_data():
-    with open("cards_details.json", "r") as file:
+    with open("P:\\Documents\\Terminale\\NSI\\7wonders-dev\\cards\\cards_details.json", "r") as file:
         return json.load(file)
 
 
 def get_ages_data():
-    with open("ages_details.json", "r") as file:
+    with open("P:\\Documents\\Terminale\\NSI\\7wonders-dev\\cards\\ages_details.json", "r") as file:
         return json.load(file)
 
 
@@ -70,4 +70,4 @@ def get_commercial_structures(cards_data, card, age):
 
 
 if __name__ == "__main__":
-    print(get_cards_per_age(1)[6])
+    print(get_cards_per_age(1))
