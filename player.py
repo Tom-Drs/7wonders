@@ -21,14 +21,14 @@
         self.engine.receive_card(self, self.hand_cards[card_number])
         
     def print_data(self):
-    print("------------")
-    for i in inspect.getmembers(self):
-        i = list(i)
-        if not i[0].startswith('_'):
-            if not inspect.ismethod(i[1]):
-                if i[0] == "hand_cards" or i[0] == "placed_cards":
-                    i[1] = [card.name for card in i[1]]
-                print(i)
+        print("------------")
+        for i in inspect.getmembers(self):
+            i = list(i)
+            if not i[0].startswith('_'):
+                if not inspect.ismethod(i[1]):
+                    if i[0] == "hand_cards" or i[0] == "placed_cards":
+                        i[1] = [card.name for card in i[1]]
+                    print(i)
 
 
 
