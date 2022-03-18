@@ -11,7 +11,6 @@ class GameEngine:
         self.cards = []
         self.current_age = 1
         self.create_players()
-        self.wait_players()
         self.cards_deposit = []
 
     def create_players(self):
@@ -30,7 +29,7 @@ class GameEngine:
         if player is None:
             raise Exception("Player not found with id.")
         if player.can_put_card(card):
-            self.cards_deposit.append(card)
+            self.cards_deposit.append(card, player)
 
     def get_player_by_id(self, player_id):
         for player in self.players:
@@ -39,5 +38,32 @@ class GameEngine:
         return None
 
     def play_current_round(self):
+        for i in range(7):
+            self.wait_players()
+            if len(self.cards_deposit) == self.number_player:
+                self.copy_state = self.get_copy_state()
+                for card, player in self.cards_deposit:
+                    player.placed_cards.append(card)
+                    for card_index in range(len(player.hand_cards)):
+                        if card.name == player.hand_cards[card_index]:
+                            player.hand_cards.pop(card_index)
+                    player.print_data()
+            self.next_state()
+            self.cards_deposit = []
+
+    
+    def next_state(self):
+        self.players = []
+        for player in self.copy_state:
+            self.players.append(player)
+
+    def get_copy_state(self):
+        return [player for player in self.players]
+
+    # def get_player_in_copy_state(self, player):
+    #     for new_player in self.copy_state:
+    #         if player.id == new_player.id:
+    #             return new_player
+    #     return None
 
 
