@@ -1,10 +1,11 @@
 ﻿import inspect 
 from pprint import pprint
+from typing import List
 
-class Player():
+class Player:
     """ Player class to get all information"""
-    def __init__(self, id, hand_cards, wonder, engine, gold=3, war_points=0):
-
+    def __init__(self, id: int, hand_cards: list, wonder, engine, gold: int=3,
+                 war_points: int=0):
         self.id = id
         self.gold = gold
         self.hand_cards = hand_cards
@@ -15,7 +16,10 @@ class Player():
 
     def play(self):
         self.print_data()
-        card_number = int(input(f"Quelle carte voulez vous jouer ? ({self.id})"))
+        card_number = input(f"Quelle carte voulez vous jouer ? ({self.id})")
+        if card_number == "b":
+            return self.engine.create_backup()
+        card_number = int(card_number)
         while not 0 <= card_number < len(self.hand_cards):
             card_number = int(input(f"Quelle carte voulez vous jouer ? ({self.id})"))
         return self.send_card(card_number)
