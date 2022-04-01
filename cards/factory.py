@@ -24,12 +24,12 @@ def get_cards_per_age(age):
 
 
 def get_cards_data():
-    with open("P:\\Documents\\Terminale\\NSI\\7wonders-dev\\cards\\cards_details.json", "r") as file:
+    with open("cards/cards_details.json", "r") as file:
         return json.load(file)
 
 
 def get_ages_data():
-    with open("P:\\Documents\\Terminale\\NSI\\7wonders-dev\\cards\\ages_details.json", "r") as file:
+    with open("cards/ages_details.json", "r") as file:
         return json.load(file)
 
 
