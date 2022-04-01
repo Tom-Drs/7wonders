@@ -1,11 +1,10 @@
 ﻿import inspect 
 from pprint import pprint
-from typing import List
 
-class Player:
+class Player():
     """ Player class to get all information"""
-    def __init__(self, id: int, hand_cards: list, wonder, engine, gold: int=3,
-                 war_points: int=0):
+    def __init__(self, id, hand_cards, wonder, engine, gold=3, war_points=0):
+
         self.id = id
         self.gold = gold
         self.hand_cards = hand_cards
@@ -63,16 +62,38 @@ class Player:
         cost = card.cost
         if cost == {}:
             return True
+          
         elif list(cost.items())[0][0] == "gold":
-            if resource["gold"] >= cost["gold"]:
-                return True
-            return False
+            return self.put_with_gold(resource, cost)
+          
         del resource["gold"]
-        for key, value in resource.items():
+        cost = self.put_with_gold(resource, cost)
+        if cost != {}:
+            cost = self.put_with_split_resource(resource, cost)
+        if cost == {}:
+            return True
+        return False
+                         
+
+    """retrieve information on war points"""
+    def current_war_points():
+        pass
+
+
+    def put_with_gold(resource, cost):
+        if resource["gold"] >= cost["gold"]:
+                return True
+        return False
+
+    def put_with_resource(resource, cost):
+      for key, value in resource.items():
             if cost.get(key) != None:
                 cost[key] -= value
                 if cost[key] == 0:
                     del cost[key]
+      return cost
+
+    def put_with_split_resource(resource, cost):
         resource_split = []
         dico_resource_split = {}
         cpt = 0                      
@@ -102,11 +123,5 @@ class Player:
             elif cost.get(elt[1]) != None:
                 cost[elt[1]] -= 1
                 if cost[elt[1]] == 0:
-                    del cost[elt[1]]                 
-        if cost == {}:
-            return True
-        return False
-
-    """retrieve information on war points"""
-    def current_war_points():
-        pass
+                    del cost[elt[1]]
+        return cost

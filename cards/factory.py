@@ -46,13 +46,13 @@ def get_manufactured_goods(cards_data, card, age):
 
 
 def get_civilian_structures(cards_data, card, age):
-    victory_points = cards_data.get(card)["victory_points"]
+    victory_points = cards_data.get(card)["victory points"]
     cost = {key: value for key, value in cards_data.get(card).get("cost").items()}
     return CivilianStructures(victory_points, card, age, "blue", cost=cost)
 
 
 def get_military_structures(cards_data, card, age):
-    war_points = cards_data.get(card)["war_points"]
+    war_points = cards_data.get(card)["war points"]
     cost = {key: value for key, value in cards_data.get(card).get("cost").items()}
     return MilitaryStructures(war_points, card, age, "red", cost=cost)
 
