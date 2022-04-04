@@ -1,13 +1,17 @@
 import sys
 from PySide6 import QtWidgets
+from PySide6.QtGui import QShortcut, QKeySequence
 from cards.factory import get_cards_per_age
 import inspect
 from engine import GameEngine
 from cards.cards import Card
+import pickle
 
 class MainWindow(QtWidgets.QWidget):
     def __init__(self):
+
         super().__init__()
+        self.resize(1000, 1000)
         self.setWindowTitle("Seven Wonders")
         self.engine = GameEngine()
         self.setup_ui()
@@ -35,25 +39,36 @@ class MainWindow(QtWidgets.QWidget):
         self.main_layout = QtWidgets.QGridLayout(self)
 
     def add_widgets_to_layouts(self):
-        self.main_layout.addWidget(self.player_0_tree)
-        self.main_layout.addWidget(self.player_1_tree)
-        self.main_layout.addWidget(self.player_2_tree)
-        self.main_layout.addWidget(self.button)
-        self.main_layout.addWidget(self.input)
+        self.main_layout.addWidget(self.player_0_tree, 0, 0)
+        self.main_layout.addWidget(self.player_1_tree, 0, 1)
+        self.main_layout.addWidget(self.player_2_tree, 1, 0)
+        self.main_layout.addWidget(self.button, 2, 1)
+        self.main_layout.addWidget(self.input, 2, 0)
 
     def setup_connections(self):
-        return self.button.clicked.connect(self.play)
+        self.button.clicked.connect(self.play)
+        QShortcut(QKeySequence("Enter"), self, self.play)
 
     def play(self):
         result = self.input.text().split()
+        if result[0] == "b":
+            self.engine.create_backup()
+        if result[0] == "l":
+            with open(f"backups/state{result[1]}.pickle", "rb") as file:
+                self.engine = pickle.load(file)
+                self.reload()
+                return
         if len(self.engine.cards_deposit) == 2:
             self.engine.receive_card(int(result[0]), int(result[1]))
-            self.clearLayout()
-            self.create_widgets()
-            self.add_widgets_to_layouts()
-            self.setup_connections()
+            self.reload()
             return
         self.engine.receive_card(int(result[0]), int(result[1]))
+
+    def reload(self):
+        self.clearLayout()
+        self.create_widgets()
+        self.add_widgets_to_layouts()
+        self.setup_connections()
 
     def clearLayout(self, layout=0):
         layout = self.main_layout
