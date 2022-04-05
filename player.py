@@ -1,4 +1,4 @@
-﻿import inspect 
+import inspect 
 from pprint import pprint
 
 class Player():
@@ -67,13 +67,11 @@ class Player():
         resource = self.get_all_resources()
         cost = card.cost
         if cost == {}:
-            return True
-          
+            return True          
         elif list(cost.items())[0][0] == "gold":
-            return self.put_with_gold(resource, cost)
-          
+            return self.put_with_gold(resource, cost)          
         del resource["gold"]
-        cost = self.put_with_gold(resource, cost)
+        cost = self.put_with_resource(resource, cost)
         if cost != {}:
             cost = self.put_with_split_resource(resource, cost)
         if cost == {}:
@@ -86,12 +84,12 @@ class Player():
         pass
 
 
-    def put_with_gold(resource, cost):
+    def put_with_gold(self, resource, cost):
         if resource["gold"] >= cost["gold"]:
                 return True
         return False
 
-    def put_with_resource(resource, cost):
+    def put_with_resource(self, resource, cost):
       for key, value in resource.items():
             if cost.get(key) != None:
                 cost[key] -= value
@@ -99,13 +97,13 @@ class Player():
                     del cost[key]
       return cost
 
-    def put_with_split_resource(resource, cost):
+    def put_with_split_resource(self, resource, cost):
         resource_split = []
         dico_resource_split = {}
         cpt = 0                      
         for key, value in resource.items():            
             if len(key) > 6:
-                resource_split.append(resource[key].split("/"))
+                resource_split.append((list(resource.keys())[0]).split("/"))
                 for index in range(len(resource_split[cpt])):
                     if dico_resource_split.get(resource_split[cpt][index]) == None:
                         dico_resource_split[resource_split[cpt][index]] = value
