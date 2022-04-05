@@ -52,11 +52,11 @@
       "tissue": 1
     }
   },
-  "puit": {
+  "verrerie": {
     "type": "Manufactured Goods",
     "cost": {},
     "production": {
-    "water": 1
+    "glass": 1
     }
   },
   "presse": {
@@ -66,12 +66,12 @@
       "paper": 1
     }
   },
-  "pawnshop": {
+  "preteur sur gages": {
     "type": "Civilian Structures",
     "cost": {},
     "victory points": 3
   },
-  "bain": {
+  "bains": {
     "type": "Civilian Structures",
     "cost": {
       "stone": 1
@@ -88,7 +88,7 @@
     "cost": {},
     "victory points": 2
   },
-  "reserve": {
+  "palissade": {
     "type": "Military Structures",
     "cost": {
       "wood": 1
@@ -109,7 +109,7 @@
     },
     "war points": 1
   },
-  "aphothicaire": {
+  "officine": {
     "type": "Scientific Structures",
     "cost": {
       "tissue": 1
@@ -119,7 +119,7 @@
   "atelier": {
     "type": "Scientific Structures",
     "cost": {
-      "water": 1
+      "glass": 1
     },
     "symbol": "wheel"
   },
