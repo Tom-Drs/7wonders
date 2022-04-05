@@ -40,11 +40,23 @@ class GameEngine:
         card = player.hand_cards[card]
         if player is None:
             raise Exception("Player not found with id.")
-        if not player.is_double(card):
-            self.cards_deposit.append((card, player))
-            print(f"Le joueur {player.id} a vérouillé la carte {card.name}")
+        if self.player_has_already_played(player_id):
+            return f"Le joueur {player_id} a deja verouille un coup"
+        if player.is_double(card):
+            return f"Le joueur {player_id} ne peut pas poser 2x la meme carte sur le plateau"
+        if not player.can_put_card(card):
+            return f"Le joueur {player_id} ne peut pas jouer la carte {card.name}"
+        self.cards_deposit.append((card, player))
         if len(self.cards_deposit) == self.number_player:
             self.play_current_round()
+            return(f"Le joueur {player.id} a vérouillé la carte {card.name} et la manche a ete joue")
+        return(f"Le joueur {player.id} a vérouillé la carte {card.name}")
+
+    def player_has_already_played(self, player_id):
+        locked_player = [move[1].id for move in self.cards_deposit]
+        if player_id in locked_player:
+            return True
+        return False
 
     def get_player_by_id(self, player_id: int, players_list: list=None):
         """Method to get player in the player list with an id."""
@@ -105,12 +117,6 @@ class GameEngine:
             decks.append(self.players[0].hand_cards)
         for index in range(len(self.players)):
             self.players[index].hand_cards = decks[index]
-
-    def can_put_card(self, card, player):
-        """Method  to verify if a player can put a card."""
-        resource = player.get_all_resources()
-        cost = card.cost
-        pass  # comparer les ressources avec le prix de la carte
         
     def create_backup(self):
         index = 0

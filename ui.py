@@ -27,6 +27,7 @@ class MainWindow(QtWidgets.QWidget):
     def create_widgets(self):
         self.button = QtWidgets.QPushButton("Valider")
         self.input = QtWidgets.QLineEdit()
+        self.label_info = QtWidgets.QLabel("")
 
         self.player_0_tree = self.create_player_tree(0)
         self.player_1_tree = self.create_player_tree(1)
@@ -44,6 +45,7 @@ class MainWindow(QtWidgets.QWidget):
         self.main_layout.addWidget(self.player_2_tree, 1, 0)
         self.main_layout.addWidget(self.button, 2, 1)
         self.main_layout.addWidget(self.input, 2, 0)
+        self.main_layout.addWidget(self.label_info, 3, 0)
 
     def setup_connections(self):
         self.button.clicked.connect(self.play)
@@ -57,46 +59,51 @@ class MainWindow(QtWidgets.QWidget):
             with open(f"backups/state{result[1]}.pickle", "rb") as file:
                 self.engine = pickle.load(file)
                 self.reload()
+                self.label_info.setText(f"La backup {result[1]}.pickle a ete load")
                 return
         if len(self.engine.cards_deposit) == 2:
-            self.engine.receive_card(int(result[0]), int(result[1]))
+            response = self.engine.receive_card(int(result[0]), int(result[1]))
             self.reload()
+            self.label_info.setText(response)
             return
-        self.engine.receive_card(int(result[0]), int(result[1]))
+        response = self.engine.receive_card(int(result[0]), int(result[1]))
+        self.label_info.setText(response)
 
     def reload(self):
-        self.clearLayout()
+        self.clear_layout()
         self.create_widgets()
         self.add_widgets_to_layouts()
         self.setup_connections()
 
-    def clearLayout(self, layout=0):
+    def clear_layout(self, layout=0):
         layout = self.main_layout
         while layout.count():
             child = layout.takeAt(0)
             if child.widget() is not None:
                 child.widget().deleteLater()
             elif child.layout() is not None:
-                self.clearLayout(child.layout())
+                self.clear_layout(child.layout())
 
-    def create_player_tree(self, player_id):
+    def create_player_tree(self, player_id: int):
         player = self.engine.get_player_by_id(player_id)
         player_data = player.get_data()
-        items = []
-        for key, value in player_data.items():
-            if key == "hand_cards" or key == "placed_cards":
-                item = QtWidgets.QTreeWidgetItem(None, [key])
-                for card in value:
-                    card_item = QtWidgets.QTreeWidgetItem(None, [card.name])
+        attributes = []
+        for player_key, player_value in player_data.items():
+            if player_key == "hand_cards" or player_key == "placed_cards":
+                item = QtWidgets.QTreeWidgetItem(None, [player_key])
+                card_index = 0
+                for card in player_value:
+                    card_item = QtWidgets.QTreeWidgetItem(None, [f"{card_index} {card.name}"])
+                    card_index += 1
                     card_data = card.get_data()
-                    for attribute_key, attribute_value in card_data.items():
-                        content = QtWidgets.QTreeWidgetItem(None, [f"{attribute_key} : {attribute_value}"])
+                    for card_key, card_value in card_data.items():
+                        content = QtWidgets.QTreeWidgetItem(None, [f"{card_key} : {card_value}"])
                         card_item.addChild(content)
                     item.addChild(card_item)
-                items.append(item)
+                attributes.append(item)
             else:
-                items.append(QtWidgets.QTreeWidgetItem(None, [f"{key} : {value}"]))
+                attributes.append(QtWidgets.QTreeWidgetItem(None, [f"{player_key} : {player_value}"]))
         widget = QtWidgets.QTreeWidget()
         widget.setHeaderLabel(f"Player {player_id}")
-        widget.insertTopLevelItems(0, items)
+        widget.insertTopLevelItems(0, attributes)
         return widget
