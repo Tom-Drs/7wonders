@@ -57,9 +57,3 @@ class CommercialStructures(Card):
     def __init__(self, effect, name, age, color, cost=None, chain_list=None):
         Card.__init__(self, name, age, color, cost, chain_list)
         self.effect = effect
-
-
-class Wonder:
-    def __init__(self, name, production):
-        self.name = name
-        self.production = production
