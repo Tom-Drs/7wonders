@@ -89,6 +89,7 @@ class Player():
                 return True
         return False
 
+    
     def put_with_resource(self, resource, cost):
       for key, value in resource.items():
             if cost.get(key) != None:
@@ -96,6 +97,7 @@ class Player():
                 if cost[key] == 0:
                     del cost[key]
       return cost
+
 
     def put_with_split_resource(self, resource, cost):
         resource_split = []
@@ -129,3 +131,12 @@ class Player():
                 if cost[elt[1]] == 0:
                     del cost[elt[1]]
         return cost
+
+    
+    def buy(self, other, cost): #A test
+        other_resource = other.get_all_resources()
+        if cost not in other_resource:
+            del other_resource["gold"]
+            if other.put_with_split(other_resource, cost) == {}:
+                return "Ce joueur n'a pas les resources neccaissaire"
+        return "Ce joeur a les resources neccaissaire"
