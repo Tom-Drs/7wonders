@@ -57,9 +57,9 @@ class MainWindow(QtWidgets.QWidget):
     def play(self):
         result = self.input.text().split()
         if result[0] == "b":
-            self.engine.create_backup()
+            self.engine.create_backup(result[1])
         if result[0] == "l":
-            with open(f"backups/state{result[1]}.pickle", "rb") as file:
+            with open(f"backups/{result[1]}.pickle", "rb") as file:
                 self.engine = pickle.load(file)
                 self.reload()
                 self.label_info.setText(f"La backup {result[1]}.pickle a ete load")
@@ -107,14 +107,15 @@ class MainWindow(QtWidgets.QWidget):
             else:
                 attributes.append(QtWidgets.QTreeWidgetItem(None, [f"{player_key} : {player_value}"]))
         widget = QtWidgets.QTreeWidget()
-        widget.itemDoubleClicked.connect(self.test)
+        widget.itemDoubleClicked.connect(self.trigger_current_move)
         widget.setHeaderLabel(f"Player {player_id}")
         widget.insertTopLevelItems(0, attributes)
         return widget
 
-    def test(self, d):
-        player_id = d.treeWidget().headerItem().text(0).split()[1]
-        card_id = d.text(0).split()[0]
+    def trigger_current_move(self, item):
+        
+        player_id = item.treeWidget().headerItem().text(0).split()[1]
+        card_id = item.text(0).split()[0]
         if player_id.isdigit() and card_id.isdigit():
             self.play_double_click(int(player_id), int(card_id))
 

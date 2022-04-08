@@ -44,9 +44,8 @@ class GameEngine:
             return f"Le joueur {player_id} a deja verouille un coup"
         if player.is_double(card):
             return f"Le joueur {player_id} ne peut pas poser 2x la meme carte sur le plateau"
-        result_can_put_card = player.can_put_card(card)
-        if type(result_can_put_card) == tuple:
-            return f"Le joueur {player_id} ne peut pas jouer la carte {card.name} car il lui manque {result_can_put_card[1]}"
+        if not player.can_put_card(card):
+            return f"Le joueur {player_id} ne peut pas jouer la carte {card.name}"
         self.cards_deposit.append((card, player))
         if len(self.cards_deposit) == self.number_player:
             self.play_current_round()
@@ -119,11 +118,11 @@ class GameEngine:
         for index in range(len(self.players)):
             self.players[index].hand_cards = decks[index]
         
-    def create_backup(self):
+    def create_backup(self, name):
         index = 0
-        while path.exists(f"backups/state{index}.pickle"):
-            index += 1
-        with open(f"backups/state{index}.pickle", "wb") as file:
+        if path.exists(f"backups/{name}.pickle"):
+            return "Une backup porte deja ce nom"
+        with open(f"backups/{name}.pickle", "wb") as file:
             game = pickle.dump(self, file)
-        print(f"Etat copie dans le fichier backups/state{index}.pickle")
+        print(f"Etat copie dans le fichier backups/{name}.pickle")
         exit(0)
