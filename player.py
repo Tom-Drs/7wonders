@@ -135,7 +135,7 @@ class Player():
     
     def buy(self, other, cost): #A test
         other_resource = other.get_all_resources()
-        if cost not in other_resource:
+        if cost not in other_resource: #pas de 'in' avec les dico
             del other_resource["gold"]
             if other.put_with_split(other_resource, cost) == {}:
                 return "Ce joueur n'a pas les resources neccaissaire"
