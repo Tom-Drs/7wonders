@@ -17,7 +17,9 @@ class GameEngine:
         self.players = []
         self.cards = []
         self.current_age = 1
+        self.round = 1
         self.copy_state = 0
+        self.discard = []
         self.create_players()
         self.cards_deposit = []
         self.allocate_decks()
@@ -48,6 +50,7 @@ class GameEngine:
         if type(result_can_put_card) == tuple:
             return f"Le joueur {player_id} ne peut pas jouer la carte {card.name} car il lui manque {result_can_put_card[1]}"
         self.cards_deposit.append((card, player))
+        player.bought_card = []
         if len(self.cards_deposit) == self.number_player:
             self.play_current_round()
             return(f"Le joueur {player.id} a vérouillé la carte {card.name} et la manche a ete joue")
@@ -69,13 +72,14 @@ class GameEngine:
         return None
 
     def play_current_round(self):
-        """Method to start the game."""
+        """Method to play a round."""
         if len(self.cards_deposit) == self.number_player:
             self.copy_state = self.get_copy_state()
             for card, player in self.cards_deposit:
                 current_player = self.get_player_by_id(player.id,
                                                        self.copy_state)
                 current_player.placed_cards.append(card)
+                current_player.current_war_points()
                 for card_index in range(len(player.hand_cards)):
                     if card.name == current_player.hand_cards[card_index].name:
                         current_player.hand_cards.pop(card_index)
@@ -83,7 +87,18 @@ class GameEngine:
                 current_player.print_data()
         self.next_state()
         self.cards_deposit = []
-        self.switch_decks()
+        self.set_next_round()
+
+    def set_next_round(self):
+        self.round += 1
+        if self.round == 7:
+            for player in self.players:
+                self.discard.append(player.hand_cards[0])
+            self.allocate_decks()
+            self.current_age += 1
+            self.round = 1
+        else:
+            self.switch_decks()
 
     def next_state(self):
         """Method to transfert the state copy in the main state."""

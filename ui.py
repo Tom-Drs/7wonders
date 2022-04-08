@@ -28,10 +28,13 @@ class MainWindow(QtWidgets.QWidget):
         self.button = QtWidgets.QPushButton("Valider")
         self.input = QtWidgets.QLineEdit()
         self.label_info = QtWidgets.QLabel("")
+        self.label_age = QtWidgets.QLabel(f"Age {self.engine.current_age}")
+        self.label_round = QtWidgets.QLabel(f"Tour {self.engine.round}")
 
         self.player_0_tree = self.create_player_tree(0)
         self.player_1_tree = self.create_player_tree(1)
         self.player_2_tree = self.create_player_tree(2)
+
 
     def modify_widgets(self):
         pass
@@ -40,12 +43,16 @@ class MainWindow(QtWidgets.QWidget):
         self.main_layout = QtWidgets.QGridLayout(self)
 
     def add_widgets_to_layouts(self):
-        self.main_layout.addWidget(self.player_0_tree, 0, 0)
-        self.main_layout.addWidget(self.player_1_tree, 0, 1)
-        self.main_layout.addWidget(self.player_2_tree, 1, 0)
-        self.main_layout.addWidget(self.button, 2, 1)
-        self.main_layout.addWidget(self.input, 2, 0)
+        self.main_layout.addWidget(self.label_age, 0, 0)
+        self.main_layout.addWidget(self.label_round, 0, 1)
+
+        self.main_layout.addWidget(self.player_0_tree, 1, 0)
+        self.main_layout.addWidget(self.player_1_tree, 1, 1)
+        self.main_layout.addWidget(self.player_2_tree, 2, 0)
+        self.main_layout.addWidget(self.button, 4, 1)
+        self.main_layout.addWidget(self.input, 4, 0)
         self.main_layout.addWidget(self.label_info, 3, 0)
+
 
     def setup_connections(self):
         self.button.clicked.connect(self.play)
@@ -58,12 +65,18 @@ class MainWindow(QtWidgets.QWidget):
         result = self.input.text().split()
         if result[0] == "b":
             self.engine.create_backup(result[1])
-        if result[0] == "l":
+        elif result[0] == "l":
             with open(f"backups/{result[1]}.pickle", "rb") as file:
                 self.engine = pickle.load(file)
                 self.reload()
                 self.label_info.setText(f"La backup {result[1]}.pickle a ete load")
                 return
+        elif result[1] == "b":
+            neighbor = self.engine.get_player_by_id(int(result[2]))
+            player = self.engine.get_player_by_id(int(result[0]))
+            player.buy(neighbor, int(result[3]))
+            self.reload()
+            return
         if len(self.engine.cards_deposit) == 2:
             response = self.engine.receive_card(int(result[0]), int(result[1]))
             self.reload()

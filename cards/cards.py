@@ -57,3 +57,7 @@ class CommercialStructures(Card):
     def __init__(self, effect, name, age, color, cost=None, chain_list=None):
         Card.__init__(self, name, age, color, cost, chain_list)
         self.effect = effect
+
+class ReductionStructures(CommercialStructures):
+    def __init__(self, effect, name, age, color, cost=None, chain_list=None):
+        super().__init__(effect, name, age, color, cost, chain_list)

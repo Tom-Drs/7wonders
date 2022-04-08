@@ -129,5 +129,20 @@
       "paper": 1
     },
     "symbol": "tablet"
+  },
+  "marche": {
+    "type": "Commercial Structures",
+    "effect": "bidule",
+    "cost": {}
+  },
+  "comptoir ouest": {
+    "type": "Commercial Structures",
+    "effect": "bidule",
+    "cost": {}
+  },
+  "comptoir est": {
+    "type": "Commercial Structures",
+    "effect": "bidule",
+    "cost": {}
   }
 }
