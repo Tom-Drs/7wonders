@@ -51,6 +51,9 @@ class MainWindow(QtWidgets.QWidget):
         self.button.clicked.connect(self.play)
         QShortcut(QKeySequence("Enter"), self, self.play)
 
+    def mouseDoubleClickEvent(self, e):
+        print(e)
+
     def play(self):
         result = self.input.text().split()
         if result[0] == "b":
@@ -104,6 +107,23 @@ class MainWindow(QtWidgets.QWidget):
             else:
                 attributes.append(QtWidgets.QTreeWidgetItem(None, [f"{player_key} : {player_value}"]))
         widget = QtWidgets.QTreeWidget()
+        widget.itemDoubleClicked.connect(self.test)
         widget.setHeaderLabel(f"Player {player_id}")
         widget.insertTopLevelItems(0, attributes)
         return widget
+
+    def test(self, d):
+        player_id = d.treeWidget().headerItem().text(0).split()[1]
+        card_id = d.text(0).split()[0]
+        if player_id.isdigit() and card_id.isdigit():
+            self.play_double_click(int(player_id), int(card_id))
+
+
+    def play_double_click(self, player_id, card_id):
+        if len(self.engine.cards_deposit) == 2:
+            response = self.engine.receive_card(player_id, card_id)
+            self.reload()
+            self.label_info.setText(response)
+            return
+        response = self.engine.receive_card(player_id, card_id)
+        self.label_info.setText(response)
