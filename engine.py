@@ -44,8 +44,9 @@ class GameEngine:
             return f"Le joueur {player_id} a deja verouille un coup"
         if player.is_double(card):
             return f"Le joueur {player_id} ne peut pas poser 2x la meme carte sur le plateau"
-        if not player.can_put_card(card):
-            return f"Le joueur {player_id} ne peut pas jouer la carte {card.name}"
+        result_can_put_card = player.can_put_card(card)
+        if type(result_can_put_card) == tuple:
+            return f"Le joueur {player_id} ne peut pas jouer la carte {card.name} car il lui manque {result_can_put_card[1]}"
         self.cards_deposit.append((card, player))
         if len(self.cards_deposit) == self.number_player:
             self.play_current_round()
