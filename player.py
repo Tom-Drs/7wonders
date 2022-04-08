@@ -12,6 +12,7 @@ class Player():
         self.placed_cards = []
         self.engine = engine
         self.wonder = wonder
+        self.bought_card = []
 
     def play(self):
         self.print_data()
@@ -51,7 +52,14 @@ class Player():
                     if resources_in_possession.get(key) == None:
                         resources_in_possession[key] = value
                     else:
-                        resources_in_possession[key] += value                
+                        resources_in_possession[key] += value
+        for index_card in range(len(self.bought_card)):                        
+            if self.bought_card[index_card][0].color == "brown" or self.bought_card[index_card][0].color == "grey":
+                for key, value in self.bought_card[index_card][0].production.items():
+                    if resources_in_possession.get(key) == None:
+                        resources_in_possession[key] = value
+                    else:
+                        resources_in_possession[key] += value
         resources_in_possession["gold"] = self.gold
         return resources_in_possession
 
@@ -133,10 +141,6 @@ class Player():
         return cost
 
     
-    def buy(self, other, cost): #A test
-        other_resource = other.get_all_resources()
-        if cost not in other_resource: #pas de 'in' avec les dico
-            del other_resource["gold"]
-            if other.put_with_split(other_resource, cost) == {}:
-                return "Ce joueur n'a pas les resources neccaissaire"
-        return "Ce joeur a les resources neccaissaire"
+    def buy(self, other, indice_card, reduction=0):
+        self.bought_card.append((other.placed_cards[indice_card], reduction+2))
+        self.gold -= reduction+2
