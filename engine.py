@@ -6,9 +6,6 @@ from random import randint
 from os import path
 import pickle
 
-# from ui import MainWindow
-# from PySide6 import QtWidgets
-# import sys
 
 class GameEngine:
 
@@ -84,7 +81,6 @@ class GameEngine:
                     if card.name == current_player.hand_cards[card_index].name:
                         current_player.hand_cards.pop(card_index)
                         break
-                current_player.print_data()
         self.next_state()
         self.cards_deposit = []
         self.set_next_round()

@@ -1,8 +1,8 @@
+import copy
 import inspect
-from pprint import pprint
 
 
-class Player():
+class Player:
     """ Player class to get all information"""
 
     def __init__(self, id, hand_cards, wonder, engine, gold=3, war_points=0):
@@ -104,57 +104,60 @@ class Player():
         return False
 
     def put_with_resource(self, resource, cost):
+        cost_copy = copy.copy(cost)
         for key, value in resource.items():
-            if cost.get(key) != None:
-                cost[key] -= value
-                if cost[key] == 0:
-                    del cost[key]
-        return cost
+            if cost_copy.get(key) != None:
+                cost_copy[key] -= value
+                if cost_copy[key] == 0:
+                    del cost_copy[key]
+        return cost_copy
 
-    def put_with_split_resource(self, resource, cost):
-        resource_split = []
-        dico_resource_split = {}
-        cpt = 0
-        for key, value in resource.items():
-            if len(key) > 6:
-                resource_split.append((list(resource.keys())[0]).split("/"))
-                for index in range(len(resource_split[cpt])):
-                    if dico_resource_split.get(
-                            resource_split[cpt][index]) == None:
-                        dico_resource_split[resource_split[cpt][index]] = value
-                    else:
-                        dico_resource_split[resource_split[cpt][index]] += value
-                cpt += 1
-        for elt in resource_split:
-            if cost.get(elt[0]) != None and cost.get(elt[1]) != None:
-                if dico_resource_split[elt[0]] >= dico_resource_split[elt[1]]:
-                    cost[elt[1]] -= 1
-                    if cost[elt[1]] == 0:
-                        del cost[elt[1]]
-                else:
-                    cost[elt[0]] -= 1
-                    if cost[elt[0]] == 0:
-                        del cost[elt[0]]
-            elif cost.get(elt[0]) != None:
-                cost[elt[0]] -= 1
-                if cost[elt[0]] == 0:
-                    del cost[elt[0]]
-            elif cost.get(elt[1]) != None:
-                cost[elt[1]] -= 1
-                if cost[elt[1]] == 0:
-                    del cost[elt[1]]
-        return cost
+    def put_with_split_resource(self, player_ressources: dict,
+                                card_cost: dict) -> dict:
+        player_ressources = {key: value for key, value in player_ressources.items() if len(key.split("/")) > 1}
+        ensemble = [ressource.split("/") for ressource in player_ressources]
+        total_uplets = []
+        for number in range(2 ** len(player_ressources)):
+            binary_uplet = self.convert_binary(number, bits=len(player_ressources))
+            uplet = self.binary_to_uplet(binary_uplet, ensemble)
+            total_uplets.append(uplet)
+        for uplet in total_uplets:
+            if len(self.put_with_resource(uplet, card_cost)) == 0:
+                return {}
+        if len(total_uplets) == 1:
+            return card_cost
+        else:
+            return min(total_uplets, key=lambda uplet: len(self.put_with_resource(uplet, card_cost)))
+
+    def binary_to_uplet(self, binary_list: list, ensemble: list) -> dict:
+        result = {}
+        for index, value in enumerate(binary_list):
+            if result.get(ensemble[index][value]) is None:
+                result.update({ensemble[index][value]: 1})
+            else:
+                result[ensemble[index][value]] += 1
+        return result
+
+
+    def convert_binary(self, number, bits=8):
+        binary = [0 for i in range(bits)]
+        index = 0
+        while number > 0:
+            binary[index] = number % 2
+            number //= 2
+            index += 1
+        return binary
 
     def buy(self, other, indice_card):
         if other.placed_cards[indice_card].color == 'brown':
-            if self.golf >= 2 + self.reduction_rawmaterials:
+            if self.gold >= 2 + self.reduction_rawmaterials:
                 self.bought_card.append((other.placed_cards[indice_card],
                                          self.reduction_rawmaterials + 2))
                 self.gold -= self.reduction_rawmaterials + 2
             else:
                 return f"Le joueur {self.id} n'a pas assez d'argent pour acheter cette carte"
         if other.placed_cards[indice_card].color == 'grey':
-            if self.golf >= 2 + self.reduction_manufacturedgoods:
+            if self.gold >= 2 + self.reduction_manufacturedgoods:
                 self.bought_card.append((other.placed_cards[indice_card],
                                          self.reduction_manufacturedgoods + 2))
                 self.gold -= self.reduction_manufacturedgoods + 2
@@ -162,3 +165,11 @@ class Player():
                 return f"Le joueur {self.id} n'a pas assez d'argent pour acheter cette carte"
         else:
             return f"Le joueur {self.id} ne peut pas acheter cette carte"
+
+if __name__ == "__main__":
+    a = {"ore": 1, "clay": 2}
+    b = {"ore": 1}
+    t = Player(1, 2, 3, 4)
+    t.put_with_resource(a, b)
+    print(a)
+    print(b)

@@ -68,6 +68,3 @@ def get_commercial_structures(cards_data, card, age):
     cost = {key: value for key, value in cards_data.get(card).get("cost").items()}
     return CommercialStructures(effect, card, age, "yellow", cost=cost)
 
-
-if __name__ == "__main__":
-    print(get_cards_per_age(1))
