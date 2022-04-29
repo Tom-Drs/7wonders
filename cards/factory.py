@@ -3,34 +3,34 @@ from cards.cards import *
 
 
 class Factory():
-    def __init__(self):
-        self.cards = []
-        self.cards_data = self.get_cards_data()
-        self.ages_data = self.get_ages_data()
 
     def get_cards_per_age(self, age, number_players):
+        cards = []
+        cards_data = self.get_cards_data()
+        ages_data = self.get_ages_data()
         if age == 1:
-            for card in self.ages_data.get("1").get(f"{number_players} players"):
-                if self.cards_data.get(card).get("type") == "Raw Materials":
-                    self.cards.append(self.get_raw_materials(self.cards_data, card, age))
-                elif self.cards_data.get(card).get("type") == "Manufactured Goods":
-                    self.cards.append(self.get_manufactured_goods(self.cards_data, card, age))
-                elif self.cards_data.get(card).get("type") == "Civilian Structures":
-                    self.cards.append(self.get_civilian_structures(self.cards_data, card, age))
-                elif self.cards_data.get(card).get("type") == "Military Structures":
-                    self.cards.append(self.get_military_structures(self.cards_data, card, age))
-                elif self.cards_data.get(card).get("type") == "Scientific Structures":
-                    self.cards.append(self.get_scientific_structures(self.cards_data, card, age))
-                elif self.cards_data.get(card).get("type") == "Reduction Structures":
-                    self.cards.append(self.get_reduction_structures(self.cards_data, card, age))
-                elif self.cards_data.get(card).get("type") == "Gold Card Structures":
-                    self.cards.append(self.get_gold_card_structures(self.cards_data, card, age)) 
-                elif self.cards_data.get(card).get("type") == "Product Commercial Structures":
-                    self.cards.append(self.get_product_commercial_structures(self.cards_data, card, age))
-                elif self.cards_data.get(card).get("type") == "Gold Card Neighbour Structures":
-                    self.cards.append(self.get_gold_card_neighbour_structures(self.cards_data, card, age))
-                elif self.cards_data.get(card).get("type") == "Gold Structures":
-                    self.cards.append(self.get_gold_structures(self.cards_data, card, age))        
+            for card in ages_data.get("1").get(f"{number_players} players"):
+                if cards_data.get(card).get("type") == "Raw Materials":
+                    cards.append(self.get_raw_materials(cards_data, card, age))
+                elif cards_data.get(card).get("type") == "Manufactured Goods":
+                    cards.append(self.get_manufactured_goods(cards_data, card, age))
+                elif cards_data.get(card).get("type") == "Civilian Structures":
+                    cards.append(self.get_civilian_structures(cards_data, card, age))
+                elif cards_data.get(card).get("type") == "Military Structures":
+                    cards.append(self.get_military_structures(cards_data, card, age))
+                elif cards_data.get(card).get("type") == "Scientific Structures":
+                    cards.append(self.get_scientific_structures(cards_data, card, age))
+                elif cards_data.get(card).get("type") == "Reduction Structures":
+                    cards.append(self.get_reduction_structures(cards_data, card, age))
+                elif cards_data.get(card).get("type") == "Gold Card Structures":
+                    cards.append(self.get_gold_card_structures(cards_data, card, age))
+                elif cards_data.get(card).get("type") == "Product Commercial Structures":
+                    cards.append(self.get_product_commercial_structures(cards_data, card, age))
+                elif cards_data.get(card).get("type") == "Gold Card Neighbour Structures":
+                    cards.append(self.get_gold_card_neighbour_structures(cards_data, card, age))
+                elif cards_data.get(card).get("type") == "Gold Structures":
+                    cards.append(self.get_gold_structures(cards_data, card, age))
+        return cards
 
 
     def get_cards_data(self):

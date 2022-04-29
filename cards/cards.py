@@ -34,7 +34,7 @@ class RawMaterials(Card):
 
     def play(self, player):
         player.placed_cards.add_card(self) 
-        player.hand_cards.delet_card(self.name)
+        player.hand_cards.delete_card(self.name)
         if self.cost.get("gold") != None:
             self.player.gold -= self.cost.get("gold")    
 
@@ -48,7 +48,7 @@ class ManufacturedGoods(Card):
 
     def play(self, player):
         player.placed_cards.add_card(self) 
-        player.hand_cards.delet_card(self.name)    
+        player.hand_cards.delete_card(self.name)    
 
 
 class CivilianStructures(Card):
@@ -60,7 +60,7 @@ class CivilianStructures(Card):
 
     def play(self, player):
         player.placed_cards.add_card(self) 
-        player.hand_cards.delet_card(self.name)
+        player.hand_cards.delete_card(self.name)
         player.victory_points += self.victory_points    
 
 
@@ -73,7 +73,7 @@ class MilitaryStructures(Card):
         
     def play(self, player):
         player.placed_cards.add_card(self) 
-        player.hand_cards.delet_card(self.name)
+        player.hand_cards.delete_card(self.name)
         player.war_points += self.war_points     
 
 
@@ -86,11 +86,11 @@ class ScientificStructures(Card):
 
     def play(self, player):
         player.placed_cards.add_card(self) 
-        player.hand_cards.delet_card(self.name)
-        if player.symbol.get(self.symbol) == None:
-            player.symbol.update({self.symbol: 1})
+        player.hand_cards.delete_card(self.name)
+        if player.symbols.get(self.symbol) == None:
+            player.symbols.update({self.symbol: 1})
         else:
-            player.symbol[self.symbol] += 1       
+            player.symbols[self.symbol] += 1
 
 
 class ReductionStructures(Card):
@@ -101,13 +101,13 @@ class ReductionStructures(Card):
 
     def play(self, player):
         player.placed_cards.add_card(self) 
-        player.hand_cards.delet_card(self.name)
-        if self.effect == "reduction_rawmaterials_nl":
-            player.reduction_rawmaterials["left_neighbour"] -= 1
-        elif self.effect == "reduction_rawmaterials_nr":
-            player.reduction_rawmaterials["right_neighbour"] -= 1
-        elif self.effect == "reduction_manufactured":
-            player.reduction_manufacturedgoods -= 1
+        player.hand_cards.delete_card(self.name)
+        if self.effect == "reduction_raw_materials_left":
+            player.reduction_rawmaterials["left_neighbor"] += 1
+        elif self.effect == "reduction_raw_materials_right":
+            player.reduction_rawmaterials["right_neighbor"] += 1
+        elif self.effect == "reduction_manufactured_goods":
+            player.reduction_manufactured_goods += 1
 
 
 class GoldStructures(Card):
@@ -118,7 +118,7 @@ class GoldStructures(Card):
 
     def play(self, player):
         player.placed_cards.add_card(self) 
-        player.hand_cards.delet_card(self.name)
+        player.hand_cards.delete_card(self.name)
         player.gold += self.effect
 
 
@@ -130,7 +130,7 @@ class GoldCardStructures(Card):
 
     def play(self, player):
         player.placed_cards.add_card(self) 
-        player.hand_cards.delet_card(self.name)
+        player.hand_cards.delete_card(self.name)
         if self.effect == "brown":
             number_brown_card = player.placed_cards.count_card_by_color("brown")
             player.gold += number_brown_card
@@ -153,8 +153,7 @@ class ProductCommercialStructures(Card):
 
     def play(self, player):
         player.placed_cards.add_card(self) 
-        player.hand_cards.delet_card(self.name)
-        ##################################################################################################################################################### A voir avec Tom    
+        player.hand_cards.delete_card(self.name)
 
 
 class GoldCardNeighbourStructures(Card):
@@ -165,18 +164,18 @@ class GoldCardNeighbourStructures(Card):
 
     def play(self, player):
         player.placed_cards.add_card(self) 
-        player.hand_cards.delet_card(self.name)
+        player.hand_cards.delete_card(self.name)
         if self.effect == "brown":
             number_brown_card = player.placed_cards.count_card_by_color("brown")
-            left_neighbour = player.engine.get_player_by_id(player.id-1%player.engine.number_player, player.engine.players)
-            number_brown_left_neighbour_card = left_neighbour.placed_cards.count_card_by_color("brown")
-            right_neighbour = player.engine.get_player_by_id(player.id+1%player.engine.number_player, player.engine.players)
-            number_brown_right_neighbour_card = right_neighbour.placed_cards.count_card_by_color("brown")
-            player.gold += number_brown_card + number_brown_left_neighbour_card + number_brown_right_neighbour_card
+            left_neighbor = player.engine.get_player_by_id(player.left_neighbor_id)
+            number_brown_left_neighbor_card = left_neighbor.placed_cards.count_card_by_color("brown")
+            right_neighbor = player.engine.get_player_by_id(player.right_neighbor_id)
+            number_brown_right_neighbor_card = right_neighbor.placed_cards.count_card_by_color("brown")
+            player.gold += number_brown_card + number_brown_left_neighbor_card + number_brown_right_neighbor_card
         elif self.effect == "grey":
             number_grey_card = player.placed_cards.count_card_by_color("grey")
-            left_neighbour = player.engine.get_player_by_id(player.id-1%player.engine.number_player, player.engine.players)
-            number_grey_left_neighbour_card = left_neighbour.placed_cards.count_card_by_color("grey")
-            right_neighbour = player.engine.get_player_by_id(player.id+1%player.engine.number_player, player.engine.players)
-            number_grey_right_neighbour_card = right_neighbour.placed_cards.count_card_by_color("grey")
-            player.gold += 2*(number_grey_card + number_grey_left_neighbour_card + number_grey_right_neighbour_card) 
+            left_neighbor = player.engine.get_player_by_id(player.left_neighbor_id)
+            number_grey_left_neighbor_card = left_neighbor.placed_cards.count_card_by_color("grey")
+            right_neighbor = player.engine.get_player_by_id(player.right_neighbor_id)
+            number_grey_right_neighbor_card = right_neighbor.placed_cards.count_card_by_color("grey")
+            player.gold += 2*(number_grey_card + number_grey_left_neighbor_card + number_grey_right_neighbor_card)

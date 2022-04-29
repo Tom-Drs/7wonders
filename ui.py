@@ -1,11 +1,12 @@
 import sys
 from PySide6 import QtWidgets
 from PySide6.QtGui import QShortcut, QKeySequence
-from cards.factory import get_cards_per_age
+from cards.factory import Factory
 import inspect
 from engine import GameEngine
 from cards.cards import Card
 import pickle
+import sys
 
 class MainWindow(QtWidgets.QWidget):
     def __init__(self):
@@ -15,7 +16,14 @@ class MainWindow(QtWidgets.QWidget):
         self.setWindowTitle("Seven Wonders")
         self.engine = GameEngine()
         self.setup_ui()
+        self.run_engine()
 
+    def run_engine(self):
+        if len(sys.argv) > 1:
+            with open(f"backups/{sys.argv[1]}.pickle", "rb") as file:
+                self.engine = pickle.load(file)
+                self.reload()
+                self.label_info.setText(f"La backup {sys.argv[1]}.pickle a ete load")
 
     def setup_ui(self):
         self.create_widgets()
@@ -58,9 +66,6 @@ class MainWindow(QtWidgets.QWidget):
         self.button.clicked.connect(self.play)
         QShortcut(QKeySequence("Enter"), self, self.play)
 
-    def mouseDoubleClickEvent(self, e):
-        print(e)
-
     def play(self):
         result = self.input.text().split()
         if result[0] == "b":
@@ -74,8 +79,9 @@ class MainWindow(QtWidgets.QWidget):
         elif result[1] == "b":
             neighbor = self.engine.get_player_by_id(int(result[2]))
             player = self.engine.get_player_by_id(int(result[0]))
-            player.buy(neighbor, int(result[3]))
+            response = player.buy(neighbor, int(result[3]))
             self.reload()
+            self.label_info.setText(response)
             return
         if len(self.engine.cards_deposit) == 2:
             response = self.engine.receive_card(int(result[0]), int(result[1]))
@@ -105,10 +111,10 @@ class MainWindow(QtWidgets.QWidget):
         player_data = player.get_data()
         attributes = []
         for player_key, player_value in player_data.items():
-            if player_key == "hand_cards" or player_key == "placed_cards":
+            if player_key == "hand_cards" or player_key == "placed_cards" or player_key == "bought_cards":
                 item = QtWidgets.QTreeWidgetItem(None, [player_key])
                 card_index = 0
-                for card in player_value:
+                for card in player_value.cards:
                     card_item = QtWidgets.QTreeWidgetItem(None, [f"{card_index} {card.name}"])
                     card_index += 1
                     card_data = card.get_data()

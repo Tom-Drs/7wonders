@@ -1,6 +1,6 @@
 from player import Player
 from cards.factory import Factory
-
+from decks import Deck
 
 from random import randint
 from os import path
@@ -12,7 +12,7 @@ class GameEngine:
     def __init__(self, number_player: int=3):
         self.number_player = number_player
         self.players = []
-        self.cards = []
+        cards = []
         self.current_age = 1
         self.round = 1
         self.copy_state = 0
@@ -20,12 +20,16 @@ class GameEngine:
         self.create_players()
         self.cards_deposit = []
         self.allocate_decks()
+        self.buy_orders = []
 
     def create_players(self):
         """Method to create player objects."""
         for player_id in range(self.number_player):
-            new_player = Player(id=player_id, hand_cards=[], engine=self,
-                                wonder=None)
+            left_neighbor_id = (player_id - 1) % self.number_player
+            right_neighbor_id = (player_id + 1) % self.number_player
+            new_player = Player(id=player_id, hand_cards=None, engine=self,
+                                wonder=None, left_neighbor_id=left_neighbor_id,
+                                right_neighbor_id=right_neighbor_id)
             self.players.append(new_player)
 
     def wait_players(self):
@@ -33,21 +37,20 @@ class GameEngine:
         for player in self.players:
             player.play()
 
-    def receive_card(self, player_id: int, card):
+    def receive_card(self, player_id: int, card_id: int):
         """Method call when a player wants to play a card."""
         player = self.get_player_by_id(player_id, self.players)
-        card = player.hand_cards[card]
+        card = player.hand_cards.cards[card_id]
         if player is None:
             raise Exception("Player not found with id.")
         if self.player_has_already_played(player_id):
             return f"Le joueur {player_id} a deja verouille un coup"
-        if player.is_double(card):
-            return f"Le joueur {player_id} ne peut pas poser 2x la meme carte sur le plateau"
         result_can_put_card = player.can_put_card(card)
-        if type(result_can_put_card) == tuple:
+        if isinstance(result_can_put_card, tuple):
             return f"Le joueur {player_id} ne peut pas jouer la carte {card.name} car il lui manque {result_can_put_card[1]}"
+        elif result_can_put_card is False:
+            return "non tu joues pas"
         self.cards_deposit.append((card, player))
-        player.bought_card = []
         if len(self.cards_deposit) == self.number_player:
             self.play_current_round()
             return(f"Le joueur {player.id} a vérouillé la carte {card.name} et la manche a ete joue")
@@ -75,12 +78,9 @@ class GameEngine:
             for card, player in self.cards_deposit:
                 current_player = self.get_player_by_id(player.id,
                                                        self.copy_state)
-                current_player.placed_cards.append(card)
-                current_player.current_war_points()
-                for card_index in range(len(player.hand_cards)):
-                    if card.name == current_player.hand_cards[card_index].name:
-                        current_player.hand_cards.pop(card_index)
-                        break
+                card.play(current_player)
+                current_player.bought_cards = Deck()
+            self.pay_seller()
         self.next_state()
         self.cards_deposit = []
         self.set_next_round()
@@ -110,12 +110,13 @@ class GameEngine:
         factory = Factory()
         cards = factory.get_cards_per_age(self.current_age, self.number_player)
         number_cards = int(len(cards) / self.number_player)
-        for player in range(self.number_player):
+        for player_id in range(self.number_player):
+            deck = Deck()
             for _ in range(number_cards):
                 random = randint(0, len(cards) - 1)
-                self.get_player_by_id(player, self.players).hand_cards.append(
-                    cards[random])
+                deck.add_card(cards[random])
                 cards.pop(random)
+            self.get_player_by_id(player_id).hand_cards = deck
 
     def switch_decks(self):
         """Method to switching decks between players."""
@@ -139,3 +140,18 @@ class GameEngine:
             game = pickle.dump(self, file)
         print(f"Etat copie dans le fichier backups/{name}.pickle")
         exit(0)
+
+    def receive_buy_order(self, buyer, seller, card, price):
+        self.buy_orders.append((buyer, seller, card, price))
+
+    def has_already_buy(self, buyer, seller, card):
+        for order in self.buy_orders:
+            order_simply = (order[0], order[1], order[2])
+            if order_simply == (buyer, seller, card):
+                return True
+        False
+
+    def pay_seller(self):
+        for order in self.buy_orders:
+            order[1].gold += order[3]
+        self.buy_orders = []

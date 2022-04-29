@@ -1,8 +1,88 @@
 {
   "1": {
-    "3 players": ["filon", "exploitation forestiere", "fosse argileuse", "cavite",
-    "chantier", "bassin argileux", "metier a tisser", "verrerie", "presse", "bains",
-      "autel", "theatre", "palissade", "caserne", "tour de gardes", "officine",
-     "atelier", "scriptorium", "marche", "comptoir ouest", "comptoir est"]
+    "3 players": [
+      "filon",
+      "exploitation forestiere",
+      "fosse argileuse",
+      "cavite",
+      "chantier",
+      "bassin argileux",
+      "metier a tisser",
+      "verrerie",
+      "presse",
+      "bains",
+      "autel",
+      "theatre",
+      "palissade",
+      "caserne",
+      "tour de gardes",
+      "officine",
+      "atelier",
+      "scriptorium",
+      "marche",
+      "comptoir ouest",
+      "comptoir est"
+    ],
+    "4 players": [
+      "preteur sur gages",
+      "excavation",
+      "chantier",
+      "tour de garde",
+      "filon",
+      "scriptorium",
+      "taverne"
+    ],
+    "5 players": [
+      "cavite",
+      "gisement",
+      "taverne",
+      "caserne",
+      "officine",
+      "autel",
+      "bassin argileux"
+    ],
+    "6 players": [
+      "presse",
+      "metier a tisser",
+      "verrerie",
+      "marche",
+      "theatre",
+      "mine",
+      "friche"
+    ],
+    "7 players": [
+      "atelier",
+      "bains",
+      "preteur sur gages",
+      "palissade",
+      "comptoir ouest",
+      "comptoir est",
+      "taverne"
+    ]
+  },
+  "2": {
+    "3 players": [
+      "verrerie",
+      "metier a tisser",
+      "presse",
+      "scierie",
+      "briqueterie",
+      "carriere",
+      "fonderie",
+      "tribunal",
+      "temple",
+      "aqueduc",
+      "statue",
+      "champs de tir",
+      "muraille",
+      "ecuries",
+      "laboratoire",
+      "dispensaire",
+      "ecole",
+      "bibliotheque",
+      "vignoble",
+      "caravanserail",
+      "forum"
+    ]
   }
 }
