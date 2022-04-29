@@ -5,17 +5,18 @@ import inspect
 class Player:
     """ Player class to get all information"""
 
-    def __init__(self, id, hand_cards, wonder, engine, gold=3, war_points=0):
+    def __init__(self, id, hand_cards, wonder, engine):
 
         self.id = id
-        self.gold = gold
+        self.gold = 3
         self.hand_cards = hand_cards
-        self.war_points = war_points
+        self.war_points = 0
         self.placed_cards = []
         self.engine = engine
         self.wonder = wonder
         self.bought_card = []
-        self.reduction_rawmaterials = 0
+        self.victory_points = 0
+        self.reduction_rawmaterials = {"left_neighbour": 0, "right_neighbour": 0}
         self.reduction_manufacturedgoods = 0
 
     def play(self):
@@ -74,7 +75,7 @@ class Player:
                 return True
         return False
 
-    def can_put_card(self, card): #A test
+    def can_put_card(self, card): 
         resource = self.get_all_resources()
         cost = card.cost
         if cost == {}:
@@ -88,15 +89,7 @@ class Player:
         if cost == {}:
             return True
         return False, cost
-
-    """retrieve information on war points"""
-
-    def current_war_points(self):
-        total_war_points = 0
-        for card in self.placed_cards:
-            if card.color == 'red':
-                total_war_points += card.war_points
-        self.war_points = total_war_points
+  
 
     def put_with_gold(self, resource, cost):
         if resource["gold"] >= cost["gold"]:
@@ -149,11 +142,15 @@ class Player:
         return binary
 
     def buy(self, other, indice_card):
+        if other.id == self.id-1%self.engine.number_player:
+            reduction_rawmaterials = self.reduction_rawmaterials["left_neighbour"]
+        else:
+            reduction_rawmaterials = self.reduction_rawmaterials["right_neighbour"]    
         if other.placed_cards[indice_card].color == 'brown':
-            if self.gold >= 2 + self.reduction_rawmaterials:
+            if self.gold >= 2 + reduction_rawmaterials:
                 self.bought_card.append((other.placed_cards[indice_card],
-                                         self.reduction_rawmaterials + 2))
-                self.gold -= self.reduction_rawmaterials + 2
+                                         reduction_rawmaterials + 2))
+                self.gold -= reduction_rawmaterials + 2
             else:
                 return f"Le joueur {self.id} n'a pas assez d'argent pour acheter cette carte"
         if other.placed_cards[indice_card].color == 'grey':
@@ -166,10 +163,3 @@ class Player:
         else:
             return f"Le joueur {self.id} ne peut pas acheter cette carte"
 
-if __name__ == "__main__":
-    a = {"ore": 1, "clay": 2}
-    b = {"ore": 1}
-    t = Player(1, 2, 3, 4)
-    t.put_with_resource(a, b)
-    print(a)
-    print(b)

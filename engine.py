@@ -1,5 +1,5 @@
 from player import Player
-from cards.factory import get_cards_per_age
+from cards.factory import Factory
 
 
 from random import randint
@@ -107,7 +107,8 @@ class GameEngine:
 
     def allocate_decks(self):
         """Method to allocate decks for each player."""
-        cards = get_cards_per_age(self.current_age)
+        factory = Factory()
+        cards = factory.get_cards_per_age(self.current_age, self.number_player)
         number_cards = int(len(cards) / self.number_player)
         for player in range(self.number_player):
             for _ in range(number_cards):
