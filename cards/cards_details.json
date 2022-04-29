@@ -131,18 +131,23 @@
     "symbol": "tablet"
   },
   "marche": {
-    "type": "Commercial Structures",
-    "effect": "bidule",
+    "type": "Reduction Structures",
+    "effect": "reduction_Mmnufactured",
     "cost": {}
   },
   "comptoir ouest": {
-    "type": "Commercial Structures",
-    "effect": "bidule",
+    "type": "Reduction Structures",
+    "effect": "reduction_rawmaterials_nl",
     "cost": {}
   },
   "comptoir est": {
-    "type": "Commercial Structures",
-    "effect": "bidule",
+    "type": "Reduction Structures",
+    "effect": "reduction_rawmaterials_nr",
+    "cost": {}
+  },
+  "taverne": {
+    "type": "Gold Structures",
+    "effect": 5,
     "cost": {}
   }
 }
