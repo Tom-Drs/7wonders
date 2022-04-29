@@ -1,0 +1,328 @@
+{
+  "filon": {
+    "type": "Raw Materials",
+    "cost": {},
+    "production": {
+      "ore": 1
+    }
+  },
+  "exploitation forestiere": {
+    "type": "Raw Materials",
+    "cost": {
+      "gold": 1
+    },
+    "production": {
+      "stone/wood": 1
+    }
+  },
+  "fosse argileuse": {
+    "type": "Raw Materials",
+    "cost": {
+      "gold": 1
+    },
+    "production": {
+      "clay/ore": 1
+    }
+  },
+  "cavite": {
+    "type": "Raw Materials",
+    "cost": {},
+    "production": {
+      "stone": 1
+    }
+  },
+  "chantier": {
+    "type": "Raw Materials",
+    "cost": {},
+    "production": {
+      "wood": 1
+    }
+  },
+  "bassin argileux": {
+    "type": "Raw Materials",
+    "cost": {},
+    "production": {
+      "clay": 1
+    }
+  },
+  "metier a tisser": {
+    "type": "Manufactured Goods",
+    "cost": {},
+    "production": {
+      "tissue": 1
+    }
+  },
+  "verrerie": {
+    "type": "Manufactured Goods",
+    "cost": {},
+    "production": {
+      "glass": 1
+    }
+  },
+  "presse": {
+    "type": "Manufactured Goods",
+    "cost": {},
+    "production": {
+      "paper": 1
+    }
+  },
+  "preteur sur gages": {
+    "type": "Civilian Structures",
+    "cost": {},
+    "victory points": 3
+  },
+  "bains": {
+    "type": "Civilian Structures",
+    "cost": {
+      "stone": 1
+    },
+    "victory points": 3
+  },
+  "autel": {
+    "type": "Civilian Structures",
+    "cost": {},
+    "victory points": 2
+  },
+  "theatre": {
+    "type": "Civilian Structures",
+    "cost": {},
+    "victory points": 2
+  },
+  "palissade": {
+    "type": "Military Structures",
+    "cost": {
+      "wood": 1
+    },
+    "war points": 1
+  },
+  "caserne": {
+    "type": "Military Structures",
+    "cost": {
+      "ore": 1
+    },
+    "war points": 1
+  },
+  "tour de garde": {
+    "type": "Military Structures",
+    "cost": {
+      "clay": 1
+    },
+    "war points": 1
+  },
+  "officine": {
+    "type": "Scientific Structures",
+    "cost": {
+      "tissue": 1
+    },
+    "symbol": "compass"
+  },
+  "atelier": {
+    "type": "Scientific Structures",
+    "cost": {
+      "glass": 1
+    },
+    "symbol": "wheel"
+  },
+  "scriptorium": {
+    "type": "Scientific Structures",
+    "cost": {
+      "paper": 1
+    },
+    "symbol": "tablet"
+  },
+  "marche": {
+    "type": "Reduction Structures",
+    "effect": "reduction_manufactured_goods",
+    "cost": {}
+  },
+  "comptoir ouest": {
+    "type": "Reduction Structures",
+    "effect": "reduction_raw_materials_left",
+    "cost": {}
+  },
+  "comptoir est": {
+    "type": "Reduction Structures",
+    "effect": "reduction_raw_materials_right",
+    "cost": {}
+  },
+  "taverne": {
+    "type": "Gold Structures",
+    "effect": 5,
+    "cost": {}
+  },
+  "excavation": {
+    "type": "Raw Materials",
+    "cost": {
+      "gold": 1
+    },
+    "production": {
+      "stone/clay": 1
+    }
+  },
+  "gisement": {
+    "type": "Raw Materials",
+    "cost": {
+      "gold": 1
+    },
+    "production": {
+      "wood/ore": 1
+    }
+  },
+  "friche": {
+    "type": "Raw Materials",
+    "cost": {
+      "gold": 1
+    },
+    "production": {
+      "wood/clay": 1
+    }
+  },
+  "mine": {
+    "type": "Raw Materials",
+    "cost": {
+      "gold": 1
+    },
+    "production": {
+      "stone/ore": 1
+    }
+  },
+  "laboratoire": {
+    "type": "Scientific Structures",
+    "cost": {
+      "clay": 2,
+      "paper": 1
+    },
+    "symbol": "wheel"
+  },
+  "dispensaire": {
+    "type": "Scientific Structures",
+    "cost": {
+      "ore": 2,
+      "glass": 1
+    },
+    "symbol": "compass"
+  },
+  "ecole": {
+    "type": "Scientific Structures",
+    "cost": {
+      "wood": 1,
+      "paper": 1
+    },
+    "symbol": "tablet"
+  },
+  "bibliotheque": {
+    "type": "Scientific Structures",
+    "cost": {
+      "stone": 2,
+      "tissue": 1
+    },
+    "symbol": "tablet"
+  },
+  "ecuries": {
+    "type": "Military Structures",
+    "cost": {
+      "ore": 1,
+      "wood": 1,
+      "clay": 1
+    },
+    "war points": 2
+  },
+  "muraille": {
+    "type": "Military Structures",
+    "cost": {
+      "stone": 3
+    },
+    "war points": 2
+  },
+  "champs de tir": {
+    "type": "Military Structures",
+    "cost": {
+      "wood": 2,
+      "ore": 1
+    },
+    "war points": 2
+  },
+  "aqueduc": {
+    "type": "Civilian Structures",
+    "cost": {
+      "stone": 3
+    },
+    "victory points": 5
+  },
+  "temple": {
+    "type": "Civilian Structures",
+    "cost": {
+      "wood": 1,
+      "clay": 1,
+      "glass": 1
+    },
+    "victory points": 3
+  },
+  "tribunal": {
+    "type": "Civilian Structures",
+    "cost": {
+      "clay": 2,
+      "tissue": 1
+    },
+    "victory points": 4
+  },
+  "statue": {
+    "type": "Civilian Structures",
+    "cost": {
+      "ore": 2,
+      "wood": 1
+    },
+    "victory points": 4
+  },
+  "fonderie": {
+    "type": "Raw Materials",
+    "cost": {
+      "gold": 1
+    },
+    "production": {
+      "ore": 2
+    }
+  },
+  "carriere": {
+    "type": "Raw Materials",
+    "cost": {
+      "gold": 1
+    },
+    "production": {
+      "stone": 2
+    }
+  },
+  "briqueterie": {
+    "type": "Raw Materials",
+    "cost": {
+      "gold": 1
+    },
+    "production": {
+      "clay": 2
+    }
+  },
+  "scierie": {
+    "type": "Raw Materials",
+    "cost": {
+      "gold": 1
+    },
+    "production": {
+      "wood": 2
+    }
+  },
+  "forum": {
+    "type": "Product Commercial Structures",
+    "cost": {
+      "clay": 2
+    },
+    "production": "glass/tissue/paper"
+  },
+  "caravanserail": {
+    "type": "Product Commercial Structures",
+    "cost": {
+      "wood": 2
+    },
+    "production": "wood/stone/ore/clay"
+  }
+
+}
